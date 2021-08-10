@@ -12,7 +12,7 @@ class GPSDClient:
         self.port = port
         self.sock = None
 
-    def stream(self):
+    def json_stream(self):
         self.close()
         self.sock = socket.create_connection(address=(self.host, self.port))
         self.sock.send(b'?WATCH={"enable":true,"json":true}\n')
@@ -20,7 +20,7 @@ class GPSDClient:
             yield line.strip()
 
     def dict_stream(self, convert_datetime=True):
-        for line in self.stream():
+        for line in self.json_stream():
             result = json.loads(line)
             if convert_datetime and "time" in result:
                 result["time"] = self._convert_datetime(result["time"])
@@ -41,6 +41,9 @@ class GPSDClient:
         if self.sock:
             self.sock.close()
         self.sock = None
+
+    def __str__(self):
+        return "<GPSDClient(host=%s, port=%s)>" % (self.host, self.port)
 
     def __del__(self):
         self.close()
