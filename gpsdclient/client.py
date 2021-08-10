@@ -51,9 +51,3 @@ class GPSDClient:
 
     def __del__(self):
         self.close()
-
-
-if __name__ == "__main__":
-    client = GPSDClient()
-    for x in client.dict_stream():
-        print(x)
