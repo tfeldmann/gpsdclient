@@ -32,7 +32,7 @@ def report_tpv_header():
     print()
     for key, options in TPV_DISPLAY.items():
         width, _ = options
-        print(key.ljust(width), end=COLUMN_GAP)
+        print(key.title().ljust(width), end=COLUMN_GAP)
     print()
 
 
