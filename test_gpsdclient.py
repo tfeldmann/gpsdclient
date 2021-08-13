@@ -32,10 +32,11 @@ def fake_gpsd_server():
         chunks = [GPSD_OUTPUT[i : i + n] for i in range(0, len(GPSD_OUTPUT), n)]
         for chunk in chunks:
             client.send(chunk.encode("utf-8"))
+            time.sleep(0.01)
 
 
 def test_json_stream():
-    server = threading.Thread(target=fake_gpsd_server, daemon=True)
+    server = threading.Thread(target=fake_gpsd_server)
     server.start()
 
     client = GPSDClient()
@@ -44,7 +45,7 @@ def test_json_stream():
 
 
 def test_json_stream2():
-    server = threading.Thread(target=fake_gpsd_server, daemon=True)
+    server = threading.Thread(target=fake_gpsd_server)
     server.start()
 
     client = GPSDClient()
