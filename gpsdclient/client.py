@@ -19,7 +19,9 @@ class GPSDClient:
         self.sock = socket.create_connection(address=(self.host, int(self.port)))
         self.sock.send(b'?WATCH={"enable":true,"json":true}\n')
         for line in self.sock.makefile("r", encoding="utf-8"):
-            yield line.strip()
+            json = line.strip()
+            if json:
+                yield json
 
     def dict_stream(self, convert_datetime: bool = True) -> Iterable[dict]:
         for line in self.json_stream():
