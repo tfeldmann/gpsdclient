@@ -42,6 +42,7 @@ def fake_gpsd_server():
 def test_json_stream():
     server = threading.Thread(target=fake_gpsd_server)
     server.start()
+    time.sleep(1)
 
     client = GPSDClient()
     for i, row in enumerate(client.json_stream()):
@@ -51,6 +52,7 @@ def test_json_stream():
 def test_json_stream2():
     server = threading.Thread(target=fake_gpsd_server)
     server.start()
+    time.sleep(1)
 
     client = GPSDClient()
     for i, row in enumerate(client.json_stream()):
