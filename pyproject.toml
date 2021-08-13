@@ -6,6 +6,9 @@ authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
 license = "MIT"
 readme = "README.md"
 
+[tool.poetry.scripts]
+gpsdclient = "gpsdclient.cli:main"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 
