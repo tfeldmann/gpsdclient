@@ -18,9 +18,17 @@ class GPSDClient:
         self.close()
         self.sock = socket.create_connection(address=(self.host, int(self.port)))
         self.sock.send(b'?WATCH={"enable":true,"json":true}\n')
+        expect_version_header = True
         for line in self.sock.makefile("r", encoding="utf-8"):
             json = line.strip()
             if json:
+                if expect_version_header and not json.startswith('{"class":"VERSION"'):
+                    raise EnvironmentError(
+                        "No valid gpsd version header received. Instead received:\n"
+                        "%s...\n"
+                        "Are you sure you are connecting to gpsd?" % json[:100]
+                    )
+                expect_version_header = False
                 yield json
 
     def dict_stream(self, convert_datetime: bool = True) -> Iterable[dict]:
