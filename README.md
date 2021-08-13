@@ -2,8 +2,6 @@
 
 > A small and simple gpsd client for python 3.
 
-This package is in active development and not yet published to PyPI.
-
 ## Installation
 
 Needs python 3 installed.
