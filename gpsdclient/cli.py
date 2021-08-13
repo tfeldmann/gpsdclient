@@ -96,7 +96,6 @@ def main():
     )
     args = parser.parse_args()
     try:
-        print("Connecting to %s:%s..." % (args.host, args.port))
         run(**vars(args))
     except (ConnectionError, EnvironmentError) as e:
         print(e)
