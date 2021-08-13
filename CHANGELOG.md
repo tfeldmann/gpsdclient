@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.0 (2021-08-13)
+
+- Tabular data output in readable mode
+
 ## v0.2.0 (2021-08-13)
 
 - Check whether we really connect to a gpsd daemon

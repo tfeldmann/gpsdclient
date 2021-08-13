@@ -3,11 +3,10 @@ Shows human-readable gps output.
 """
 
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-import sys
 from . import GPSDClient
 
 
-COLUMN_GAP = "  "
+COLUMN_GAP = " | "
 TPV_DISPLAY = {
     "mode": (4, str),
     "time": (20, lambda x: x.isoformat(sep=" ", timespec="seconds")),
@@ -34,6 +33,10 @@ def report_tpv_header():
         width, _ = options
         print(key.title().ljust(width), end=COLUMN_GAP)
     print()
+    for _, options in TPV_DISPLAY.items():
+        width, _ = options
+        print("".ljust(width, "-"), end="-+-")
+    print()
 
 
 def report_tpv(data):
@@ -47,14 +50,12 @@ def report_tpv(data):
     print()
 
 
-def run(host, port, json, filter):
-    filter_topics = set(filter.upper().replace(" ", "").split(","))
+def run(host, port, json):
     client = GPSDClient(host=host, port=port)
 
     # JSON (raw) output
     if json:
         for x in client.json_stream():
-            # TODO: FILTER
             print(x)
 
     # human readable output
@@ -76,23 +77,23 @@ def run(host, port, json, filter):
 
 def main():
     parser = ArgumentParser(
-        formatter_class=ArgumentDefaultsHelpFormatter, description=__doc__
+        formatter_class=ArgumentDefaultsHelpFormatter,
+        description=__doc__,
     )
     parser.add_argument(
-        "-H", "--host", default="127.0.0.1", help="The host running gpsd"
-    )
-    parser.add_argument("-P", "--port", default="2947", help="GPSD port")
-    parser.add_argument(
-        "-J", "--json", action="store_true", help="Output as JSON strings"
+        "--host",
+        default="127.0.0.1",
+        help="The host running GPSD",
     )
     parser.add_argument(
-        "-F",
-        "--filter",
-        default="",
-        help="""
-            Only show specific GPS messages in --json mode. Pass a comma separated list
-            to show multiple message types (e.g. --filter=TPV,SKY,ATT).
-        """,
+        "--port",
+        default="2947",
+        help="GPSD port",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output as JSON strings",
     )
     args = parser.parse_args()
     try:
