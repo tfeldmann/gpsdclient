@@ -8,8 +8,7 @@
 
 ## Installation
 
-No dependencies except Python 3.
-
+Needs Python 3 (no other dependencies).
 If you want to use the library, use pip:
 
 ```
