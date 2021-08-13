@@ -3,7 +3,7 @@ import socket
 import threading
 from gpsdclient import GPSDClient
 
-socket.setdefaulttimeout(1)
+socket.setdefaulttimeout(10)
 
 
 VERSION_HEADER = b'{"class":"VERSION","release":"3.17","rev":"3.17","proto_major":3,"proto_minor":12}\n'
