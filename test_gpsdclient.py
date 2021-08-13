@@ -3,6 +3,9 @@ import socket
 import threading
 from gpsdclient import GPSDClient
 
+socket.setdefaulttimeout(1)
+
+
 VERSION_HEADER = b'{"class":"VERSION","release":"3.17","rev":"3.17","proto_major":3,"proto_minor":12}\n'
 WATCH_COMMAND = b'?WATCH={"enable":true,"json":true}\n'
 GPSD_OUTPUT = """
@@ -17,25 +20,31 @@ GPSD_OUTPUT = """
 """
 
 
-def start_server():
+def fake_gpsd_server():
     sock = socket.create_server(address=("127.0.0.1", 2947))
-    sock.listen(10)
-    while True:
-        client, _ = sock.accept()
-        client.send(VERSION_HEADER)
-        if client.recv(1000) == WATCH_COMMAND:
-            for line in GPSD_OUTPUT.splitlines():
-                client.send((line + "\n").encode("utf-8"))
-
-
-socket.setdefaulttimeout(1)
-server = threading.Thread(target=start_server, daemon=True)
-server.start()
+    sock.listen(1)
+    client, _ = sock.accept()
+    client.send(VERSION_HEADER)
+    if client.recv(100) == WATCH_COMMAND:
+        n = 120
+        chunks = [GPSD_OUTPUT[i : i + n] for i in range(0, len(GPSD_OUTPUT), n)]
+        for chunk in chunks:
+            client.send(chunk.encode("utf-8"))
 
 
 def test_json_stream():
+    server = threading.Thread(target=fake_gpsd_server, daemon=True)
+    server.start()
+
     client = GPSDClient()
     for i, row in enumerate(client.json_stream()):
         print(row)
-        if i == len(GPSD_OUTPUT.splitlines()) - 1:
-            break
+
+
+def test_json_stream2():
+    server = threading.Thread(target=fake_gpsd_server, daemon=True)
+    server.start()
+
+    client = GPSDClient()
+    for i, row in enumerate(client.json_stream()):
+        print(row)
