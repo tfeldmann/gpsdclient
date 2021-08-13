@@ -21,7 +21,9 @@ GPSD_OUTPUT = """
 
 
 def fake_gpsd_server():
-    sock = socket.create_server(address=("127.0.0.1", 2947))
+    sock = socket.socket()
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+    sock.bind(("127.0.0.1", 2947))
     sock.listen(1)
     client, _ = sock.accept()
     client.send(VERSION_HEADER)
