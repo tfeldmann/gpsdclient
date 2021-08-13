@@ -10,11 +10,11 @@ readme = "README.md"
 gpsdclient = "gpsdclient.cli:main"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.6"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.4"
 mypy = "^0.910"
+pytest = "^6.2.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
