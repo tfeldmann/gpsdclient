@@ -1,5 +1,9 @@
 # gpsdclient
 
+[![PyPI Version][pypi-image]][pypi-url]
+![PyPI - License](https://img.shields.io/pypi/l/gpsdclient)
+[![tests](https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml)
+
 > A small and simple gpsd client for python 3.
 
 ## Installation
@@ -83,3 +87,12 @@ This client is as simple as possible with one exception: It supports the automat
 conversion of "time" data into `datetime.datetime` objects.
 
 Have fun, hope you like it.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+<!-- Badges -->
+
+[pypi-image]: https://img.shields.io/pypi/v/gpsdclient
+[pypi-url]: https://pypi.org/project/gpsdclient/
