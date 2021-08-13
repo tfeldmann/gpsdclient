@@ -4,11 +4,11 @@
 ![PyPI - License](https://img.shields.io/pypi/l/gpsdclient)
 [![tests](https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml)
 
-> A small and simple gpsd client for python 3.
+> A small and simple [gpsd](https://gpsd.gitlab.io/gpsd) client and library
 
 ## Installation
 
-Needs python 3 installed.
+No dependencies except Python 3.
 
 If you want to use the library, use pip:
 
@@ -19,6 +19,7 @@ pip3 install gpsdclient
 If you want to use only the standalone gpsd viewer, I recommend to use pipx:
 
 ```
+pip3 install pipx
 pipx install gpsdclient
 ```
 
