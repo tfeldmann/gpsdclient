@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.0 (2021-08-1)
+
+- Add "Climb"-column to readable output
+- Standalone client code cleanups
+- Updated tests
+
 ## v1.0.0 (2021-08-13)
 
 - Tabular data output in readable mode
