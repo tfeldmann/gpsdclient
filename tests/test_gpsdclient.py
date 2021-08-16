@@ -13,7 +13,7 @@ def start_fake_server():
     server = threading.Thread(target=fake_gpsd_server)
     server.start()
     while not server.is_alive():
-        time.sleep(0.1)
+        time.sleep(1.0)
 
 
 def test_json_stream():
