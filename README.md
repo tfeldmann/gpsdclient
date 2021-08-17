@@ -33,9 +33,11 @@ client = GPSDClient(host="127.0.0.1")
 for result in client.json_stream():
     print(result)
 
-# or as python dicts (optionally convert time information to `datetime.datetime` objects
+# or as python dicts (optionally convert time information to `datetime` objects)
 for result in client.dict_stream(convert_datetime=True):
-    print(result)
+    if result["class"] == "TPV":
+        print("Latitude: %s" % result.get("lat", "n/a"))
+        print("Longitude: %s" % result.get("lon", "n/a"))
 ```
 
 ## Command line usage
