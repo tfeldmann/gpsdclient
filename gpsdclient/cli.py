@@ -36,8 +36,8 @@ def print_devices(data):
 
 
 def print_tpv_header():
-    titles = (key.title().ljust(width) for key, width, _ in TPV_COLUMNS)
-    lines = ("-" * width for _, width, _ in TPV_COLUMNS)
+    titles = (col.key.title().ljust(col.width) for col in TPV_COLUMNS)
+    lines = ("-" * col.width for col in TPV_COLUMNS)
     print()
     print(" | ".join(titles))
     print("-+-".join(lines))
