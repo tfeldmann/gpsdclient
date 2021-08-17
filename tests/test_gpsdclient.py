@@ -12,8 +12,9 @@ socket.setdefaulttimeout(10)
 def start_fake_server():
     server = threading.Thread(target=fake_gpsd_server)
     server.start()
+    time.sleep(1.0)
     while not server.is_alive():
-        time.sleep(1.0)
+        time.sleep(0.1)
 
 
 def test_json_stream():

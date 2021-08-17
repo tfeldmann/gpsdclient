@@ -1,8 +1,8 @@
 # gpsdclient
 
-[![PyPI Version][pypi-image]][pypi-url]
-![PyPI - License](https://img.shields.io/pypi/l/gpsdclient)
-[![tests](https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml)
+[![PyPI Version][pypi-version]][pypi-url]
+[![PyPI License][pypi-license]][mit-license]
+[![tests][test-badge]][test-url]
 
 > A small and simple [gpsd](https://gpsd.gitlab.io/gpsd) client and library
 
@@ -115,9 +115,13 @@ Have fun, hope you like it.
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT][mit-license]
 
 <!-- Badges -->
 
-[pypi-image]: https://img.shields.io/pypi/v/gpsdclient
+[pypi-version]: https://img.shields.io/pypi/v/gpsdclient
+[pypi-license]: https://img.shields.io/pypi/l/gpsdclient
 [pypi-url]: https://pypi.org/project/gpsdclient/
+[mit-license]: https://choosealicense.com/licenses/mit/
+[test-badge]: https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml/badge.svg?branch=main
+[test-url]: https://github.com/tfeldmann/gpsdclient/actions/workflows/tests.yml
