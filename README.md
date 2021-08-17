@@ -40,6 +40,9 @@ for result in client.dict_stream(convert_datetime=True):
         print("Longitude: %s" % result.get("lon", "n/a"))
 ```
 
+You can find the documentation for the available data and JSON fields in the
+[gpsd_json(5) manpage](https://www.mankier.com/5/gpsd_json).
+
 ## Command line usage
 
 You can use the `gpsdclient` standalone program or execute the module with
