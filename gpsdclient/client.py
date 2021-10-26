@@ -1,11 +1,18 @@
 """
 A simple GPSD client.
 """
+import re
 import json
 import socket
 from datetime import datetime
 
 from typing import Iterable, Union, Any
+
+# gpsd with NTRIP sources emits invalid json which contains trailing commas.
+# As the json strings emitted by gpsd are well known to not contain structures
+# like `{"foo": ",}"}` it should be safe to remove all commas directly before curly
+# braces. (https://github.com/tfeldmann/gpsdclient/issues/1)
+REGEX_TRAILING_COMMAS = re.compile(r"\s*,\s*}")
 
 
 class GPSDClient:
@@ -20,16 +27,17 @@ class GPSDClient:
         self.sock.send(b'?WATCH={"enable":true,"json":true}\n')
         expect_version_header = True
         for line in self.sock.makefile("r", encoding="utf-8"):
-            json = line.strip()
-            if json:
-                if expect_version_header and not json.startswith('{"class":"VERSION"'):
+            answ = line.strip()
+            if answ:
+                if expect_version_header and not answ.startswith('{"class":"VERSION"'):
                     raise EnvironmentError(
                         "No valid gpsd version header received. Instead received:\n"
                         "%s...\n"
-                        "Are you sure you are connecting to gpsd?" % json[:100]
+                        "Are you sure you are connecting to gpsd?" % answ[:100]
                     )
                 expect_version_header = False
-                yield json
+                cleaned_json = REGEX_TRAILING_COMMAS.sub("}", answ)
+                yield cleaned_json
 
     def dict_stream(self, convert_datetime: bool = True) -> Iterable[dict]:
         for line in self.json_stream():
