@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0 (2021-10-26)
+
+- add `filter` parameter
+- Fixes json parsing (gpsd emits invalid json with trailing commas in some cases)
+
 ## v1.1.0 (2021-08-1)
 
 - Add "Climb"-column to readable output

@@ -21,7 +21,12 @@ class GPSDClient:
         self.port = port
         self.sock = None
 
-    def json_stream(self) -> Iterable[str]:
+    def json_stream(self, filter: Iterable[str] = set()) -> Iterable[str]:
+        # prepare report filters
+        if filter:
+            report_classes = set(f.strip().upper() for f in filter)
+            filter_regex = re.compile(r'"class":\s?"(%s)"' % "|".join(report_classes))
+
         self.close()
         self.sock = socket.create_connection(address=(self.host, int(self.port)))
         self.sock.send(b'?WATCH={"enable":true,"json":true}\n')
@@ -36,11 +41,15 @@ class GPSDClient:
                         "Are you sure you are connecting to gpsd?" % answ[:100]
                     )
                 expect_version_header = False
-                cleaned_json = REGEX_TRAILING_COMMAS.sub("}", answ)
-                yield cleaned_json
 
-    def dict_stream(self, convert_datetime: bool = True) -> Iterable[dict]:
-        for line in self.json_stream():
+                if not filter or filter_regex.search(answ):
+                    cleaned_json = REGEX_TRAILING_COMMAS.sub("}", answ)
+                    yield cleaned_json
+
+    def dict_stream(
+        self, *, convert_datetime: bool = True, filter: Iterable[str] = set()
+    ) -> Iterable[dict]:
+        for line in self.json_stream(filter=filter):
             result = json.loads(line)
             if convert_datetime and "time" in result:
                 result["time"] = self._convert_datetime(result["time"])

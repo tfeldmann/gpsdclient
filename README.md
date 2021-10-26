@@ -38,6 +38,10 @@ for result in client.dict_stream(convert_datetime=True):
     if result["class"] == "TPV":
         print("Latitude: %s" % result.get("lat", "n/a"))
         print("Longitude: %s" % result.get("lon", "n/a"))
+
+# you can optionally filter by report class
+for result in client.dict_stream(filter=["TPV", "SKY"]):
+    print(result)
 ```
 
 You can find the documentation for the available data and JSON fields in the
