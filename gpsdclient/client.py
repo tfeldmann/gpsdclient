@@ -8,8 +8,8 @@ from datetime import datetime
 
 from typing import Iterable, Union, Any
 
-# gpsd with NTRIP sources emits invalid json which contains trailing commas.
-# As the json strings emitted by gpsd are well known to not contain structures
+# old versions of gpsd with NTRIP sources emit invalid json which contains trailing
+# commas. As the json strings emitted by gpsd are well known to not contain structures
 # like `{"foo": ",}"}` it should be safe to remove all commas directly before curly
 # braces. (https://github.com/tfeldmann/gpsdclient/issues/1)
 REGEX_TRAILING_COMMAS = re.compile(r"\s*,\s*}")
@@ -22,7 +22,7 @@ class GPSDClient:
         self.sock = None
 
     def json_stream(self, filter: Iterable[str] = set()) -> Iterable[str]:
-        # prepare report filters
+        # dynamically assemble a regular expression to match the given report classes
         if filter:
             report_classes = set(f.strip().upper() for f in filter)
             filter_regex = re.compile(r'"class":\s?"(%s)"' % "|".join(report_classes))
