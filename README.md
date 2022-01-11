@@ -4,7 +4,7 @@
 [![PyPI License][pypi-license]][mit-license]
 [![tests][test-badge]][test-url]
 
-> A small and simple [gpsd](https://gpsd.gitlab.io/gpsd) client and library
+> A simple and lightweight [gpsd](https://gpsd.gitlab.io/gpsd) client and library
 
 ## Installation
 
@@ -18,11 +18,10 @@ pip3 install gpsdclient
 If you want to use only the standalone gpsd viewer, I recommend to use pipx:
 
 ```
-pip3 install pipx
 pipx install gpsdclient
 ```
 
-## Usage in your scripts
+## Library usage
 
 ```python
 from gpsdclient import GPSDClient
@@ -53,7 +52,7 @@ You can use the `gpsdclient` standalone program or execute the module with
 `python3 -m gpsdclient`.
 
 ```
-$ gpsdclient --host=192.168.177.151
+$ gpsdclient
 Connected to gpsd v3.17
 Devices: /dev/ttyO4
 
@@ -95,7 +94,7 @@ All command line options:
 $ gpsdclient -h
 usage: gpsdclient [-h] [--host HOST] [--port PORT] [--json]
 
-Shows human-readable gps output.
+Connect to a running gpsd instance and show human readable output.
 
 optional arguments:
   -h, --help   show this help message and exit
@@ -108,9 +107,9 @@ optional arguments:
 
 I made this because I just needed a simple client library to read the json data gpsd is
 sending.
-The other python clients have various problems, like 100 % cpu usage, missing python 3
-support, license problems or they aren't available on PyPI. I also wanted a simple gpsd
-client to check if everything is working.
+The other python libraries have various problems, like 100 % cpu usage, missing python 3
+support, license problems, lots of dependencies or they aren't available on PyPI.
+I also wanted a simple gpsd client to check if everything is working.
 
 This client is as simple as possible with one exception: It supports the automatic
 conversion of "time" data into `datetime.datetime` objects.

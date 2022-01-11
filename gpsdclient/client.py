@@ -1,12 +1,11 @@
 """
-A simple GPSD client.
+A simple and lightweight GPSD client.
 """
-import re
 import json
+import re
 import socket
 from datetime import datetime
-
-from typing import Iterable, Union, Any
+from typing import Any, Dict, Iterable, Union
 
 # old versions of gpsd with NTRIP sources emit invalid json which contains trailing
 # commas. As the json strings emitted by gpsd are well known to not contain structures
@@ -16,10 +15,10 @@ REGEX_TRAILING_COMMAS = re.compile(r"\s*,\s*}")
 
 
 class GPSDClient:
-    def __init__(self, host="127.0.0.1", port="2947"):
+    def __init__(self, host: str = "127.0.0.1", port: Union[str, int] = "2947") -> None:
         self.host = host
         self.port = port
-        self.sock = None
+        self.sock: Any = None
 
     def json_stream(self, filter: Iterable[str] = set()) -> Iterable[str]:
         # dynamically assemble a regular expression to match the given report classes
@@ -48,7 +47,7 @@ class GPSDClient:
 
     def dict_stream(
         self, *, convert_datetime: bool = True, filter: Iterable[str] = set()
-    ) -> Iterable[dict]:
+    ) -> Iterable[Dict[str, Union[str, datetime]]]:
         for line in self.json_stream(filter=filter):
             result = json.loads(line)
             if convert_datetime and "time" in result:
