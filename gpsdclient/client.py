@@ -21,7 +21,8 @@ class GPSDClient:
         self.sock = None  # type: Any
 
     def json_stream(self, filter: Iterable[str] = set()) -> Iterable[str]:
-        # dynamically assemble a regular expression to match the given report classes
+        # Dynamically assemble a regular expression to match the given report classes.
+        # This way we don't need to parse the json to filter by report.
         if filter:
             report_classes = set(f.strip().upper() for f in filter)
             filter_regex = re.compile(r'"class":\s?"(%s)"' % "|".join(report_classes))
