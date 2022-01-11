@@ -47,7 +47,7 @@ class GPSDClient:
 
     def dict_stream(
         self, *, convert_datetime: bool = True, filter: Iterable[str] = set()
-    ) -> Iterable[Dict[str, Union[str, datetime]]]:
+    ) -> Iterable[Dict[str, Any]]:
         for line in self.json_stream(filter=filter):
             result = json.loads(line)
             if convert_datetime and "time" in result:
