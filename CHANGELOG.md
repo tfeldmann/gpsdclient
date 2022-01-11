@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.1 (2022-01-11)
+
+- Improved type hints
+
 ## v1.2.0 (2021-10-26)
 
 - add `filter` argument to return only the given report classes
