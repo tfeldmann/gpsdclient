@@ -18,7 +18,7 @@ class GPSDClient:
     def __init__(self, host: str = "127.0.0.1", port: Union[str, int] = "2947") -> None:
         self.host = host
         self.port = port
-        self.sock: Any = None
+        self.sock = None  # type: Any
 
     def json_stream(self, filter: Iterable[str] = set()) -> Iterable[str]:
         # dynamically assemble a regular expression to match the given report classes
