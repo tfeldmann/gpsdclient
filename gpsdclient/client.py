@@ -15,9 +15,10 @@ REGEX_TRAILING_COMMAS = re.compile(r"\s*,\s*}")
 
 
 class GPSDClient:
-    def __init__(self, host: str = "127.0.0.1", port: Union[str, int] = "2947") -> None:
+    def __init__(self, host: str = "127.0.0.1", port: Union[str, int] = "2947", timeout: int = None) -> None:
         self.host = host
         self.port = port
+        self.timeout = timeout
         self.sock = None  # type: Any
 
     def json_stream(self, filter: Iterable[str] = set()) -> Iterable[str]:
@@ -28,7 +29,7 @@ class GPSDClient:
             filter_regex = re.compile(r'"class":\s?"(%s)"' % "|".join(report_classes))
 
         self.close()
-        self.sock = socket.create_connection(address=(self.host, int(self.port)))
+        self.sock = socket.create_connection(address=(self.host, int(self.port)), timeout=self.timeout)
         self.sock.send(b'?WATCH={"enable":true,"json":true}\n')
         expect_version_header = True
         for line in self.sock.makefile("r", encoding="utf-8"):
