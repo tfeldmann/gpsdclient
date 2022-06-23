@@ -15,7 +15,7 @@ REGEX_TRAILING_COMMAS = re.compile(r"\s*,\s*}")
 
 
 class GPSDClient:
-    def __init__(self, host: str = "127.0.0.1", port: Union[str, int] = "2947", timeout: int = None) -> None:
+    def __init__(self, host: str = "127.0.0.1", port: Union[str, int] = "2947", timeout: int = socket.getdefaulttimeout()) -> None:
         self.host = host
         self.port = port
         self.timeout = timeout
