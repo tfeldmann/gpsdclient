@@ -22,7 +22,7 @@ def parse_datetime(x: Any) -> Union[Any, datetime]:
     """
     try:
         if isinstance(x, float):
-            return datetime.fromtimestamp(x)
+            return datetime.fromtimestamp(x, tz=None)
         elif isinstance(x, str):
             # time zone information can be omitted because gps always sends UTC.
             return datetime.strptime(x, "%Y-%m-%dT%H:%M:%S.%fZ")
