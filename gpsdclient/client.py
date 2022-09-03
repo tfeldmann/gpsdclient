@@ -4,7 +4,7 @@ A simple and lightweight GPSD client.
 import json
 import re
 import socket
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, Union
 
 # old versions of gpsd with NTRIP sources emit invalid json which contains trailing
@@ -22,10 +22,12 @@ def parse_datetime(x: Any) -> Union[Any, datetime]:
     """
     try:
         if isinstance(x, float):
-            return datetime.fromtimestamp(x, tz=None)
+            return datetime.utcfromtimestamp(x).replace(tzinfo=timezone.utc)
         elif isinstance(x, str):
             # time zone information can be omitted because gps always sends UTC.
-            return datetime.strptime(x, "%Y-%m-%dT%H:%M:%S.%fZ")
+            result = datetime.strptime(x, "%Y-%m-%dT%H:%M:%S.%fZ")
+            result = result.replace(tzinfo=timezone.utc)
+            return result
     except ValueError:
         pass
     return x

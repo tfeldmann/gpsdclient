@@ -1,7 +1,7 @@
 import threading
 import time
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest import mock
 
 import pytest
@@ -62,8 +62,8 @@ def test_dict_stream_filter(mock_client: GPSDClient, filter, count):
 @pytest.mark.parametrize(
     "input,output",
     (
-        ("2021-08-13T09:12:42.000Z", datetime(2021, 8, 13, 9, 12, 42, 0, None)),
-        (1662208127.967219, datetime(2022, 9, 3, 14, 28, 47, 967219)),
+        ("2021-08-13T09:12:42.000Z", datetime(2021, 8, 13, 9, 12, 42, 0, timezone.utc)),
+        (1662215327.967219, datetime(2022, 9, 3, 14, 28, 47, 967219, timezone.utc)),
         ("yesterday", "yesterday"),
         (object, object),
     ),
