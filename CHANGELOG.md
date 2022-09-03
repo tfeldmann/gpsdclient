@@ -5,6 +5,7 @@
 - GPSDClient now supports a `timeout` param
 - GPSDClient now can be used as a context manager
 - Code cleanup, added more tests
+- parsed datetimes now contain the UTC timezone info
 
 ## v1.2.1 (2022-01-11)
 

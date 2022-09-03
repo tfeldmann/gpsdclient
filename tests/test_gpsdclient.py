@@ -2,6 +2,7 @@ import threading
 import time
 from collections import Counter
 from datetime import datetime, timezone
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -12,7 +13,7 @@ from ._fake_server import GPSD_OUTPUT, VERSION_HEADER, fake_server
 
 
 @pytest.fixture
-def mock_client() -> GPSDClient:
+def mock_client():
     with mock.patch.object(
         GPSDClient,
         "gpsd_lines",
@@ -36,6 +37,7 @@ def server_client():
         yield client
 
 
+FILTER_TESTCASES: Any
 FILTER_TESTCASES = (
     ([], 9),
     (["TPV", "SKY"], 6),
