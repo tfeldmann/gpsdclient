@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.0 (2022-09-02)
+
+- GPSDClient now supports a `timeout` param
+- GPSDClient now can be used as a context manager
+- Code cleanup, added more tests
+
 ## v1.2.1 (2022-01-11)
 
 - Improved type hints

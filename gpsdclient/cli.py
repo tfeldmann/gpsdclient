@@ -92,10 +92,15 @@ def main():
         action="store_true",
         help="Output as JSON strings",
     )
+    parser.add_argument(
+        "--timeout",
+        default=5.0,
+        help="Socket timeout in seconds",
+    )
     args = parser.parse_args()
 
     try:
-        client = GPSDClient(host=args.host, port=args.port)
+        client = GPSDClient(host=args.host, port=args.port, timeout=float(args.timeout))
         if args.json:
             stream_json(client)
         else:
