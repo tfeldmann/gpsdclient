@@ -22,7 +22,7 @@ gpsdclient = "gpsdclient.cli:main"
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.910"
+mypy = "^0.971"
 pytest = "^6.2.4"
 
 [build-system]
