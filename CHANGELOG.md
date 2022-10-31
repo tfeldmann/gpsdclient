@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.1 (2022-10-31)
+
+- Add `py.typed` for full mypy type hint support.
+
 ## v1.3.0 (2022-09-02)
 
 - GPSDClient now supports a `timeout` param
