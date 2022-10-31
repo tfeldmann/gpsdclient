@@ -2,6 +2,7 @@ import threading
 import time
 from collections import Counter
 from datetime import datetime, timezone
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -36,7 +37,7 @@ def server_client():
         yield client
 
 
-FILTER_TESTCASES = (
+FILTER_TESTCASES: Any = (
     ([], 9),
     (["TPV", "SKY"], 6),
     ("TPV,SKY", 6),
