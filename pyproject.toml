@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gpsdclient"
-version = "1.3.1"
+version = "1.3.2"
 description = "A simple gpsd client."
 authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
 license = "MIT"

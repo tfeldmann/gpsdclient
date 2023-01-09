@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.2 (2023-01-09)
+
+- Remove timezone information from CLI output (it's always UTC).
+
 ## v1.3.1 (2022-10-31)
 
 - Add `py.typed` for full mypy type hint support.
