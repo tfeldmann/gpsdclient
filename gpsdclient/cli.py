@@ -14,7 +14,7 @@ TPV_COLUMNS = (
     Column(
         "time",
         width=20,
-        formatter=lambda x: x.isoformat(sep=" ", timespec="seconds"),
+        formatter=lambda x: x.strftime("%Y-%m-%d %H:%M:%S"),
     ),
     Column("lat", width=12, formatter=str),
     Column("lon", width=12, formatter=str),
@@ -105,8 +105,11 @@ def main():
             stream_json(client)
         else:
             stream_readable(client)
-    except (ConnectionError, EnvironmentError) as e:
-        print(e)
     except KeyboardInterrupt:
         print()
         return 0
+    except (ConnectionError, EnvironmentError) as e:
+        print(e)
+        return 1
+    except Exception:
+        return 2
