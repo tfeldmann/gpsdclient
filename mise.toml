@@ -1,0 +1,9 @@
+[tools]
+uv = "latest"
+
+[tasks.tests]
+description = "Run the tests"
+run = "uv run pytest"
+
+[settings]
+python.uv_venv_auto = "source"
