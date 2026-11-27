@@ -2,8 +2,10 @@
 Connect to a running gpsd instance and show human readable output.
 """
 
+import sys
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from collections import namedtuple
+from datetime import datetime
 
 from . import GPSDClient
 
@@ -14,7 +16,9 @@ TPV_COLUMNS = (
     Column(
         "time",
         width=20,
-        formatter=lambda x: x.strftime("%Y-%m-%d %H:%M:%S"),
+        formatter=lambda x: (
+            x.strftime("%Y-%m-%d %H:%M:%S") if isinstance(x, datetime) else str(x)
+        ),
     ),
     Column("lat", width=12, formatter=str),
     Column("lon", width=12, formatter=str),
@@ -108,8 +112,9 @@ def main():
     except KeyboardInterrupt:
         print()
         return 0
-    except (ConnectionError, EnvironmentError) as e:
-        print(e)
+    except (OSError, ConnectionError) as e:
+        print(e, file=sys.stderr)
         return 1
-    except Exception:
+    except Exception as e:
+        print("Error: %s: %s" % (type(e).__name__, e), file=sys.stderr)
         return 2

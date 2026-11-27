@@ -1,7 +1,6 @@
 import threading
-import time
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from unittest import mock
 
@@ -14,27 +13,29 @@ from ._fake_server import GPSD_OUTPUT, VERSION_HEADER, fake_server
 
 @pytest.fixture
 def mock_client():
-    with mock.patch.object(
-        GPSDClient,
-        "gpsd_lines",
-        return_value=(VERSION_HEADER + GPSD_OUTPUT).splitlines(),
+    with (
+        mock.patch.object(
+            GPSDClient,
+            "gpsd_lines",
+            return_value=(VERSION_HEADER + GPSD_OUTPUT).splitlines(),
+        ),
+        GPSDClient() as client,
     ):
-        with GPSDClient() as client:
-            yield client
+        yield client
 
 
 @pytest.fixture
 def server_client():
-    server = threading.Thread(target=fake_server)
+    ready = threading.Event()
+    server = threading.Thread(target=fake_server, args=(ready,), daemon=True)
     server.start()
 
-    # wait for server thread coming alive
-    time.sleep(1.0)
-    while not server.is_alive():
-        time.sleep(0.1)
+    # wait until the server socket is listening
+    assert ready.wait(timeout=5.0), "fake server did not start"
 
     with GPSDClient(port=20000) as client:
         yield client
+    server.join(timeout=5.0)
 
 
 FILTER_TESTCASES: Any = (
@@ -63,8 +64,12 @@ def test_dict_stream_filter(mock_client: GPSDClient, filter, count):
 @pytest.mark.parametrize(
     "input,output",
     (
-        ("2021-08-13T09:12:42.000Z", datetime(2021, 8, 13, 9, 12, 42, 0, timezone.utc)),
-        (1662215327.967219, datetime(2022, 9, 3, 14, 28, 47, 967219, timezone.utc)),
+        ("2021-08-13T09:12:42.000Z", datetime(2021, 8, 13, 9, 12, 42, 0, UTC)),
+        ("2021-08-13T09:12:42Z", datetime(2021, 8, 13, 9, 12, 42, 0, UTC)),
+        ("2021-08-13T09:12:42.5Z", datetime(2021, 8, 13, 9, 12, 42, 500000, UTC)),
+        (1662215327, datetime(2022, 9, 3, 14, 28, 47, 0, UTC)),
+        (True, True),
+        (1662215327.967219, datetime(2022, 9, 3, 14, 28, 47, 967219, UTC)),
         ("yesterday", "yesterday"),
         (object, object),
     ),
@@ -116,3 +121,29 @@ def test_dict_filter_multiple(server_client):
         counter[row["class"]] += 1
     assert counter["TPV"] == 3
     assert counter["SKY"] == 3
+
+
+def test_close_releases_socket_and_file(server_client):
+    stream = server_client.json_stream()
+    next(stream)
+    sock, file = server_client.sock, server_client._file
+    server_client.close()
+    assert server_client.sock is None and server_client._file is None
+    assert file.closed
+    assert sock.fileno() == -1
+
+
+def test_cli_time_column_handles_strings():
+    from gpsdclient.cli import print_tpv_row
+
+    # must not raise if the time could not be converted to a datetime
+    print_tpv_row({"time": "garbage", "mode": 3})
+
+
+def test_cli_reports_unexpected_errors(capsys):
+    from gpsdclient import cli
+
+    with mock.patch.object(cli, "stream_readable", side_effect=ValueError("boom")):
+        with mock.patch("sys.argv", ["gpsdclient"]):
+            assert cli.main() == 2
+    assert "boom" in capsys.readouterr().err

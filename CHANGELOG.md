@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.0 (2026-11-27)
+
+- Print errors to stderr.
+- Makes sure all sockets are closed on exit.
+- Speed up the tests by using threading.Event.
+- Modernized codebase.
+- Python >= 3.11 is now required.
+
 ## v1.3.2 (2023-01-09)
 
 - Remove timezone information from CLI output (it's always UTC).
