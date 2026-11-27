@@ -1,6 +1,6 @@
 [project]
 name = "gpsdclient"
-version = "1.3.2"
+version = "1.4.0"
 description = "A simple gpsd client."
 authors = [{ name = "Thomas Coenen", email = "mail@tcoenen.de" }]
 requires-python = ">=3.11,<4"
@@ -35,9 +35,9 @@ gpsdclient = "gpsdclient.cli:main"
 
 [dependency-groups]
 dev = [
-    "mypy>=2.4.1",
-    "pytest>=9.2.0",
-    "ruff>=0.17.6",
+  "mypy>=2.4.1",
+  "pytest>=9.2.0",
+  "ruff>=0.17.6",
 ]
 
 [tool.uv.build-backend]
