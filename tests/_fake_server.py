@@ -16,7 +16,7 @@ GPSD_OUTPUT = """\
 """
 
 
-def fake_server():
+def fake_server(ready: threading.Event | None = None):
     addr = ("127.0.0.1", 20000)
     if hasattr(socket, "create_server"):
         sock = socket.create_server(address=addr, reuse_port=True)
@@ -25,14 +25,21 @@ def fake_server():
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         sock.bind(addr)
         sock.listen(1)
-    client, _ = sock.accept()
-    client.send(VERSION_HEADER.encode("utf-8"))
-    if client.recv(100) == WATCH_COMMAND.encode("utf-8"):
-        n = 120
-        chunks = [GPSD_OUTPUT[i : i + n] for i in range(0, len(GPSD_OUTPUT), n)]
-        for chunk in chunks:
-            client.send(chunk.encode("utf-8"))
-            time.sleep(0.001)
+    if ready is not None:
+        ready.set()
+    with sock:
+        client, _ = sock.accept()
+    with client:
+        client.send(VERSION_HEADER.encode("utf-8"))
+        if client.recv(100) == WATCH_COMMAND.encode("utf-8"):
+            n = 120
+            chunks = [GPSD_OUTPUT[i : i + n] for i in range(0, len(GPSD_OUTPUT), n)]
+            for chunk in chunks:
+                try:
+                    client.send(chunk.encode("utf-8"))
+                except OSError:
+                    break  # client disconnected early
+                time.sleep(0.001)
 
 
 def main():
